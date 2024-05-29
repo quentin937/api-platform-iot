@@ -93,7 +93,7 @@ xbeeAPI.parser.on("data", function (frame) {
 
   } else if (C.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX === frame.type) {
 
-      if (frame.analogSamples.AD0 > 1095) {
+      if (frame.analogSamples.AD0 > 1100   ) {
         console.log("Incendie + Lumière Rouge")
 
           // porte
@@ -174,7 +174,7 @@ xbeeAPI.parser.on("data", function (frame) {
     }*/
 
 
-    console.log("REMOTE_COMMAND_RESPONSE")
+    //console.log("REMOTE_COMMAND_RESPONSE")
   } else {
     console.debug(frame);
     let dataReceived = String.fromCharCode.apply(null, frame.commandData)
