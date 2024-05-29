@@ -22,10 +22,6 @@ let serialport = new SerialPort(SERIAL_PORT, {
 serialport.pipe(xbeeAPI.parser);
 xbeeAPI.builder.pipe(serialport);
 
-var clr_R = 5;
-var clr_G = 5;
-var clr_B = 5;
-
 var one_time = 0;
 
 const MAC_LED = "0013A20041FB6072";
@@ -161,7 +157,7 @@ xbeeAPI.parser.on("data", function (frame) {
 
           xbeeAPI.builder.write(frame_obj);
       }
-        console.log(frame.analogSamples.AD0)
+      console.log(frame.analogSamples.AD0)
 
         //storage.registerSample(frame.remote64,frame.analogSamples.AD0 )
 
@@ -179,7 +175,7 @@ xbeeAPI.parser.on("data", function (frame) {
       if (frame.command === "D2") {
             console.log("D2 Identifier:", frame.commandData.toString());
       }
-      one_time = 1;
+      one_time++;
     }
 
 
