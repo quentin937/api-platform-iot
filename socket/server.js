@@ -93,7 +93,7 @@ xbeeAPI.parser.on("data", function (frame) {
 
   } else if (C.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX === frame.type) {
 
-      if (frame.analogSamples.AD0 > 1090) {
+      if (frame.analogSamples.AD0 > 1095) {
         console.log("Incendie + Lumière Rouge")
 
           // porte
@@ -125,7 +125,7 @@ xbeeAPI.parser.on("data", function (frame) {
 
           xbeeAPI.builder.write(frame_obj);
       } else {
-        console.log("Libre Service + Lumière pas Rouge")
+        console.log("Libre Service + Lumière Bleu")
 
           // porte
           frame_obj = { // AT Request to be sent
