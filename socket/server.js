@@ -100,7 +100,31 @@ xbeeAPI.parser.on("data", function (frame) {
   } else if (C.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX === frame.type) {
 
       if (frame.analogSamples.AD0 > 1090) {
-        console.log("Porte OPEN")
+        console.log("Incendie + Lumière Rouge")
+
+          // porte
+          frame_obj = { // AT Request to be sent
+            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: "0013A20041FB6063",
+            command: "D0",
+            commandParameter: [ 5 ],
+          };
+
+          xbeeAPI.builder.write(frame_obj);
+
+          // lumiere rouge
+          frame_obj = { // AT Request to be sent
+            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: "0013A20041FB6072",
+            command: "D0",
+            commandParameter: [ 4 ],
+          };
+
+          xbeeAPI.builder.write(frame_obj);
+      } else {
+        console.log("Libre Service + Lumière Rouge")
+
+          // porte
           frame_obj = { // AT Request to be sent
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: "0013A20041FB6063",
@@ -108,41 +132,16 @@ xbeeAPI.parser.on("data", function (frame) {
             commandParameter: [ 4 ],
           };
 
-          xbeeAPI.builder.write(frame_obj);
-      }
-      if (frame.analogSamples.AD0 <= 1090) {
-          console.log("La lumière bleu s'allume")
-          frame_obj = { // AT Request to be sent
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: "0013A20041FB6072",
-            command: "D2",
-            commandParameter: [ 4 ],
-          };
-
-          xbeeAPI.builder.write(frame_obj);
-      } else if (frame.analogSamples.AD0 <= 1100) {
-          console.log("La lumière verte s'allume")
-          frame_obj = { // AT Request to be sent
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: "0013A20041FB6072",
-            command: "D1",
-            commandParameter: [ 4 ],
-          };
-
-          xbeeAPI.builder.write(frame_obj);
-      } else if (frame.analogSamples.AD0 <= 1200) {
-          console.log("La lumière rouge s'allume")
+        // lumiere rouge
           frame_obj = { // AT Request to be sent
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
             destination64: "0013A20041FB6072",
             command: "D0",
-            commandParameter: [ 4 ],
+            commandParameter: [ 5 ],
           };
 
           xbeeAPI.builder.write(frame_obj);
       }
-
-        console.log("ZIGBEE_IO_DATA_SAMPLE_RX")
         console.log(frame.analogSamples.AD0)
 
         //storage.registerSample(frame.remote64,frame.analogSamples.AD0 )
