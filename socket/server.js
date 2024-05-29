@@ -22,24 +22,34 @@ let serialport = new SerialPort(SERIAL_PORT, {
 serialport.pipe(xbeeAPI.parser);
 xbeeAPI.builder.pipe(serialport);
 
+var clr_R = 5;
+var clr_G = 5;
+var clr_B = 5;
+
+const MAC_LED = "0013A20041FB6072";
+const MAC_PORTE = "";
+const MAC_BR = "FFFFFFFFFFFFFFFF";
+const MAC_Detect_Lumiere = "";
+
 serialport.on("open", function () {
   var frame_obj = { // AT Request to be sent
     type: C.FRAME_TYPE.AT_COMMAND,
     command: "NI",
     commandParameter: [],
   };
-
   xbeeAPI.builder.write(frame_obj);
 
   frame_obj = { // AT Request to be sent
     type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-    destination64: "FFFFFFFFFFFFFFFF",
+    destination64: MAC_BR,
     command: "NI",
     commandParameter: [],
   };
-  xbeeAPI.builder.write(frame_obj); etat_led_R = { // AT Request to be sent
+  xbeeAPI.builder.write(frame_obj);
+
+  etat_led_R = { // AT Request to be sent
     type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-    destination64: "0013A20041FB6072",
+    destination64: MAC_LED,
     command: "DO",
     commandParameter: [],
   };
@@ -47,7 +57,7 @@ serialport.on("open", function () {
 
   etat_led_G = { // AT Request to be sent
     type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-    destination64: "0013A20041FB6072",
+    destination64: MAC_LED,
     command: "D1",
     commandParameter: [],
   };
@@ -55,7 +65,7 @@ serialport.on("open", function () {
 
   etat_led_B = { // AT Request to be sent
     type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-    destination64: "0013A20041FB6072",
+    destination64: MAC_LED,
     command: "D2",
     commandParameter: [],
   };
@@ -86,42 +96,30 @@ xbeeAPI.parser.on("data", function (frame) {
     //storage.registerSensor(frame.remote64)
 
   } else if (C.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX === frame.type) {
+
       if (frame.analogSamples.AD0 <= 1090) {
           console.log("La lumière bleu s'allume")
-          frame_obj = { // AT Request to be sent
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: "0013A20041FB6072",
-            command: "D2",
-            commandParameter: [ 4 ],
-          };
 
-          xbeeAPI.builder.write(frame_obj);
-      } else if (frame.analogSamples.AD0 <= 1100) {
-          console.log("La lumière verte s'allume")
           frame_obj = { // AT Request to be sent
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: "0013A20041FB6072",
-            command: "D1",
-            commandParameter: [ 4 ],
-          };
-      } else if (frame.analogSamples.AD0 <= 1200) {
-          console.log("La lumière rouge s'allume")
-          frame_obj = { // AT Request to be sent
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: "0013A20041FB6072",
+            destination64: MAC_LED,
             command: "D0",
             commandParameter: [ 4 ],
           };
 
           xbeeAPI.builder.write(frame_obj);
+      } else if (frame.analogSamples.AD0 <= 1090) {
+
       }
-      
+
         console.log("ZIGBEE_IO_DATA_SAMPLE_RX")
         console.log(frame.analogSamples.AD0)
 
         //storage.registerSample(frame.remote64,frame.analogSamples.AD0 )
 
   } else if (C.FRAME_TYPE.REMOTE_COMMAND_RESPONSE === frame.type) {
+      // console log la frame
+      console.log("Log de la frame :", frame);
     if (frame.command === "DO") {
           console.log("DO Identifier:", frame.commandData.toString());
     } else if (frame.command === "D1") {
