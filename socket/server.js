@@ -22,8 +22,6 @@ let serialport = new SerialPort(SERIAL_PORT, {
 serialport.pipe(xbeeAPI.parser);
 xbeeAPI.builder.pipe(serialport);
 
-var one_time = 0;
-
 const MAC_LED = "0013A20041FB6072";
 const MAC_PORTE = "0013A20041FB6063";
 const MAC_BR = "FFFFFFFFFFFFFFFF";
@@ -163,20 +161,17 @@ xbeeAPI.parser.on("data", function (frame) {
 
   } else if (C.FRAME_TYPE.REMOTE_COMMAND_RESPONSE === frame.type) {
     // console log la frame
-    if (one_time < 1){
-      console.log("Log de la frame :");
-      console.log(frame);
-      if (frame.command === "DO") {
-            console.log("DO Identifier:", frame.commandData.toString());
-      }
-      if (frame.command === "D1") {
-            console.log("D1 Identifier:", frame.commandData.toString());
-      }
-      if (frame.command === "D2") {
-            console.log("D2 Identifier:", frame.commandData.toString());
-      }
-      one_time++;
+    /*console.log("Log de la frame :");
+    console.log(frame);
+    if (frame.command === "DO") {
+          console.log("DO Identifier:", frame.commandData.toString());
     }
+    if (frame.command === "D1") {
+          console.log("D1 Identifier:", frame.commandData.toString());
+    }
+    if (frame.command === "D2") {
+          console.log("D2 Identifier:", frame.commandData.toString());
+    }*/
 
 
     console.log("REMOTE_COMMAND_RESPONSE")
