@@ -140,6 +140,7 @@ xbeeAPI.parser.on("data", function (frame) {
             command: "D0",
             commandParameter: [ 4 ],
           };
+        xbeeAPI.builder.write(frame_obj);
 
         // lumiere rouge
           frame_obj = { // AT Request to be sent
