@@ -29,7 +29,7 @@ var clr_B = 5;
 var one_time = 0;
 
 const MAC_LED = "0013A20041FB6072";
-const MAC_PORTE = "";
+const MAC_PORTE = "0013A20041FB6063";
 const MAC_BR = "FFFFFFFFFFFFFFFF";
 const MAC_Detect_Lumiere = "";
 
@@ -105,7 +105,7 @@ xbeeAPI.parser.on("data", function (frame) {
           // porte
           frame_obj = { // AT Request to be sent
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: "0013A20041FB6063",
+            destination64: MAC_PORTE,
             command: "D0",
             commandParameter: [ 5 ],
           };
@@ -115,7 +115,7 @@ xbeeAPI.parser.on("data", function (frame) {
           // lumiere rouge
           frame_obj = { // AT Request to be sent
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: "0013A20041FB6072",
+            destination64: MAC_LED,
             command: "D0",
             commandParameter: [ 4 ],
           };
@@ -124,7 +124,7 @@ xbeeAPI.parser.on("data", function (frame) {
 
           frame_obj = { // AT Request to be sent
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: "0013A20041FB6072",
+            destination64: MAC_LED,
             command: "D2",
             commandParameter: [ 5 ],
           };
@@ -136,7 +136,7 @@ xbeeAPI.parser.on("data", function (frame) {
           // porte
           frame_obj = { // AT Request to be sent
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: "0013A20041FB6063",
+            destination64: MAC_PORTE,
             command: "D0",
             commandParameter: [ 4 ],
           };
@@ -145,7 +145,7 @@ xbeeAPI.parser.on("data", function (frame) {
         // lumiere rouge
           frame_obj = { // AT Request to be sent
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: "0013A20041FB6072",
+            destination64: MAC_LED,
             command: "D0",
             commandParameter: [ 5 ],
           };
@@ -154,7 +154,7 @@ xbeeAPI.parser.on("data", function (frame) {
 
           frame_obj = { // AT Request to be sent
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: "0013A20041FB6072",
+            destination64: MAC_LED,
             command: "D2",
             commandParameter: [ 4 ],
           };
@@ -167,8 +167,9 @@ xbeeAPI.parser.on("data", function (frame) {
 
   } else if (C.FRAME_TYPE.REMOTE_COMMAND_RESPONSE === frame.type) {
     // console log la frame
-    console.log("Log de la frame :", frame);
     if (one_time < 1){
+      console.log("Log de la frame :");
+      console.log(frame);
       if (frame.command === "DO") {
             console.log("DO Identifier:", frame.commandData.toString());
       }
