@@ -26,6 +26,8 @@ var clr_R = 5;
 var clr_G = 5;
 var clr_B = 5;
 
+var one_time = 0;
+
 const MAC_LED = "0013A20041FB6072";
 const MAC_PORTE = "";
 const MAC_BR = "FFFFFFFFFFFFFFFF";
@@ -135,15 +137,19 @@ xbeeAPI.parser.on("data", function (frame) {
   } else if (C.FRAME_TYPE.REMOTE_COMMAND_RESPONSE === frame.type) {
     // console log la frame
     console.log("Log de la frame :", frame);
-    if (frame.command === "DO") {
-          console.log("DO Identifier:", frame.commandData.toString());
+    if (one_time < 1){
+      if (frame.command === "DO") {
+            console.log("DO Identifier:", frame.commandData.toString());
+      }
+      if (frame.command === "D1") {
+            console.log("D1 Identifier:", frame.commandData.toString());
+      }
+      if (frame.command === "D2") {
+            console.log("D2 Identifier:", frame.commandData.toString());
+      }
+      one_time = 1;
     }
-    if (frame.command === "D1") {
-          console.log("D1 Identifier:", frame.commandData.toString());
-    }
-    if (frame.command === "D2") {
-          console.log("D2 Identifier:", frame.commandData.toString());
-    }
+
 
     console.log("REMOTE_COMMAND_RESPONSE")
   } else {
