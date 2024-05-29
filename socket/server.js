@@ -92,7 +92,7 @@ xbeeAPI.parser.on("data", function (frame) {
     //storage.registerSensor(frame.remote64)
 
   } else if (C.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX === frame.type) {
-
+/*
       if (frame.analogSamples.AD0 > 1100   ) {
         console.log("Incendie + Lumière Rouge")
 
@@ -156,8 +156,82 @@ xbeeAPI.parser.on("data", function (frame) {
           xbeeAPI.builder.write(frame_obj);
       }
       console.log(frame.analogSamples.AD0)
-
+*/
         //storage.registerSample(frame.remote64,frame.analogSamples.AD0 )
+    const ad0Value = frame.analogSamples.AD0;
+    console.log(ad0Value);
+
+    if (ad0Value > 1090) {
+      console.log("Incendie + Lumière Rouge");
+
+      // Mettre à jour l'état de la porte si nécessaire
+      if (prevPorteState !== 5) {
+        let frame_obj = {
+          type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+          destination64: MAC_PORTE,
+          command: "D0",
+          commandParameter: [5],
+        };
+        xbeeAPI.builder.write(frame_obj);
+        prevPorteState = 5;
+      }
+
+      // Mettre à jour l'état de la lumière rouge si nécessaire
+      if (prevLedState !== 5) {
+        let frame_obj = {
+          type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+          destination64: MAC_LED,
+          command: "D0",
+          commandParameter: [4],
+        };
+        xbeeAPI.builder.write(frame_obj);
+
+        frame_obj = {
+          type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+          destination64: MAC_LED,
+          command: "D2",
+          commandParameter: [5],
+        };
+        xbeeAPI.builder.write(frame_obj);
+
+        prevLedState = 5;
+      }
+    } else {
+      console.log("Libre Service + Lumière pas Rouge");
+
+      // Mettre à jour l'état de la porte si nécessaire
+      if (prevPorteState !== 4) {
+        let frame_obj = {
+          type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+          destination64: MAC_PORTE,
+          command: "D0",
+          commandParameter: [4],
+        };
+        xbeeAPI.builder.write(frame_obj);
+        prevPorteState = 4;
+      }
+
+      // Mettre à jour l'état de la lumière rouge si nécessaire
+      if (prevLedState !== 4) {
+        let frame_obj = {
+          type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+          destination64: MAC_LED,
+          command: "D0",
+          commandParameter: [5],
+        };
+        xbeeAPI.builder.write(frame_obj);
+
+        frame_obj = {
+          type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+          destination64: MAC_LED,
+          command: "D2",
+          commandParameter: [4],
+        };
+        xbeeAPI.builder.write(frame_obj);
+
+        prevLedState = 4;
+      }
+    }
 
   } else if (C.FRAME_TYPE.REMOTE_COMMAND_RESPONSE === frame.type) {
     // console log la frame
