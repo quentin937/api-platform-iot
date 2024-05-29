@@ -99,17 +99,32 @@ xbeeAPI.parser.on("data", function (frame) {
 
       if (frame.analogSamples.AD0 <= 1090) {
           console.log("La lumière bleu s'allume")
-
           frame_obj = { // AT Request to be sent
             type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: MAC_LED,
+            destination64: "0013A20041FB6072",
+            command: "D2",
+            commandParameter: [ 4 ],
+          };
+
+          xbeeAPI.builder.write(frame_obj);
+      } else if (frame.analogSamples.AD0 <= 1100) {
+          console.log("La lumière verte s'allume")
+          frame_obj = { // AT Request to be sent
+            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: "0013A20041FB6072",
+            command: "D1",
+            commandParameter: [ 4 ],
+          };
+      } else if (frame.analogSamples.AD0 <= 1200) {
+          console.log("La lumière rouge s'allume")
+          frame_obj = { // AT Request to be sent
+            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: "0013A20041FB6072",
             command: "D0",
             commandParameter: [ 4 ],
           };
 
           xbeeAPI.builder.write(frame_obj);
-      } else if (frame.analogSamples.AD0 <= 1090) {
-
       }
 
         console.log("ZIGBEE_IO_DATA_SAMPLE_RX")
@@ -118,15 +133,18 @@ xbeeAPI.parser.on("data", function (frame) {
         //storage.registerSample(frame.remote64,frame.analogSamples.AD0 )
 
   } else if (C.FRAME_TYPE.REMOTE_COMMAND_RESPONSE === frame.type) {
-      // console log la frame
-      console.log("Log de la frame :", frame);
+    // console log la frame
+    console.log("Log de la frame :", frame);
     if (frame.command === "DO") {
           console.log("DO Identifier:", frame.commandData.toString());
-    } else if (frame.command === "D1") {
-          console.log("DO Identifier:", frame.commandData.toString());
-    } else if (frame.command === "D2") {
-          console.log("DO Identifier:", frame.commandData.toString());
     }
+    if (frame.command === "D1") {
+          console.log("D1 Identifier:", frame.commandData.toString());
+    }
+    if (frame.command === "D2") {
+          console.log("D2 Identifier:", frame.commandData.toString());
+    }
+
     console.log("REMOTE_COMMAND_RESPONSE")
   } else {
     console.debug(frame);
