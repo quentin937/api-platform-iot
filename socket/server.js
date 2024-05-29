@@ -99,6 +99,17 @@ xbeeAPI.parser.on("data", function (frame) {
 
   } else if (C.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX === frame.type) {
 
+      if (frame.analogSamples.AD0 > 1090) {
+        console.log("Porte OPEN")
+          frame_obj = { // AT Request to be sent
+            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: "0013A20041FB6063",
+            command: "D0",
+            commandParameter: [ 4 ],
+          };
+
+          xbeeAPI.builder.write(frame_obj);
+      }
       if (frame.analogSamples.AD0 <= 1090) {
           console.log("La lumière bleu s'allume")
           frame_obj = { // AT Request to be sent
@@ -117,6 +128,8 @@ xbeeAPI.parser.on("data", function (frame) {
             command: "D1",
             commandParameter: [ 4 ],
           };
+
+          xbeeAPI.builder.write(frame_obj);
       } else if (frame.analogSamples.AD0 <= 1200) {
           console.log("La lumière rouge s'allume")
           frame_obj = { // AT Request to be sent
