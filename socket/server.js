@@ -121,8 +121,17 @@ xbeeAPI.parser.on("data", function (frame) {
           };
 
           xbeeAPI.builder.write(frame_obj);
+
+          frame_obj = { // AT Request to be sent
+            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: "0013A20041FB6072",
+            command: "D2",
+            commandParameter: [ 5 ],
+          };
+
+          xbeeAPI.builder.write(frame_obj);
       } else {
-        console.log("Libre Service + Lumière Rouge")
+        console.log("Libre Service + Lumière pas Rouge")
 
           // porte
           frame_obj = { // AT Request to be sent
@@ -138,6 +147,15 @@ xbeeAPI.parser.on("data", function (frame) {
             destination64: "0013A20041FB6072",
             command: "D0",
             commandParameter: [ 5 ],
+          };
+
+          xbeeAPI.builder.write(frame_obj);
+
+          frame_obj = { // AT Request to be sent
+            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: "0013A20041FB6072",
+            command: "D2",
+            commandParameter: [ 4 ],
           };
 
           xbeeAPI.builder.write(frame_obj);
