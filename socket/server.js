@@ -86,7 +86,7 @@ xbeeAPI.parser.on("data", function (frame) {
     const ad0Value = frame.analogSamples.AD0;
     console.log(ad0Value);
 
-    if (ad0Value > 1180) {
+    if (ad0Value < 1181) {
       console.log("Incendie + Lumière Rouge");
       // Mettre à jour l'état de la porte si nécessaire
       if (prevPorteState !== 5) {
@@ -120,7 +120,7 @@ xbeeAPI.parser.on("data", function (frame) {
 
         prevLedState = 5;
       }
-    } else if (ad0Value < 1181) {
+    } else if (ad0Value > 1180) {
       console.log("Libre Service + Lumière Bleu");
       // Mettre à jour l'état de la porte si nécessaire
       if (prevPorteState !== 4) {
