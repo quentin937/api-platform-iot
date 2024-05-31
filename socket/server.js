@@ -22,9 +22,10 @@ let serialport = new SerialPort(SERIAL_PORT, {
 serialport.pipe(xbeeAPI.parser);
 xbeeAPI.builder.pipe(serialport);
 
-const MAC_LED = "0013A20041FB6072";
-const MAC_PORTE = "0013A20041FB6063";
-const MAC_BR = "FFFFFFFFFFFFFFFF";
+let MAC_LED = "0013A20041FB6072";
+let MAC_PORTE = "0013A20041FB6063";
+let MAC_BR = "FFFFFFFFFFFFFFFF";
+let MAC_CAPTEUR = "";
 const MAC_Detect_Lumiere = "";
 
 serialport.on("open", function () {
@@ -92,6 +93,14 @@ xbeeAPI.parser.on("data", function (frame) {
     // let dataReceived = String.fromCharCode.apply(null, frame.nodeIdentifier);
     console.log("NODE_IDENTIFICATION");
     console.log(frame);
+
+    if (frame.nodeIdentifier === "capteur"){
+      MAC_CAPTEUR = frame.remote64;
+    } else if (frame.nodeIdentifier === "led"){
+      MAC_LED = frame.remote64;
+    } else if (frame.nodeIdentifier === "porte"){
+      MAC_PORTE = frame.remote64;
+    }
     //storage.registerSensor(frame.remote64)
 
   } else if (C.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX === frame.type) {
