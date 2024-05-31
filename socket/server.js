@@ -28,7 +28,9 @@ let MAC_PORTE = "";
 //let MAC_PORTE = "0013A20041FB6063";
 let MAC_BR = "FFFFFFFFFFFFFFFF";
 let MAC_CAPTEUR = "";
-const MAC_Detect_Lumiere = "";
+
+let prevPorteState = null;
+let prevLedState = null;
 
 serialport.on("open", function () {
   var frame_obj = { // AT Request to be sent
@@ -45,38 +47,7 @@ serialport.on("open", function () {
     commandParameter: [],
   };
   xbeeAPI.builder.write(frame_obj);
-
-  etat_led_R = { // AT Request to be sent
-    type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-    destination64: MAC_LED,
-    command: "DO",
-    commandParameter: [],
-  };
-  xbeeAPI.builder.write(etat_led_R);
-
-  etat_led_G = { // AT Request to be sent
-    type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-    destination64: MAC_LED,
-    command: "D1",
-    commandParameter: [],
-  };
-  xbeeAPI.builder.write(etat_led_G);
-
-  etat_led_B = { // AT Request to be sent
-    type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-    destination64: MAC_LED,
-    command: "D2",
-    commandParameter: [],
-  };
-  xbeeAPI.builder.write(etat_led_B);
-
 });
-
-// All frames parsed by the XBee will be emitted here
-
-// storage.listSensors().then((sensors) => sensors.forEach((sensor) => console.log(sensor.data())))
-    let prevPorteState = null;
-    let prevLedState = null;
 
 xbeeAPI.parser.on("data", function (frame) {
 
@@ -111,7 +82,7 @@ xbeeAPI.parser.on("data", function (frame) {
   } else if (C.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX === frame.type) {
 
     const ad0Value = frame.analogSamples.AD0;
-    console.log(ad0Value);
+    console.log(frame);
 
     if (ad0Value > 1100) {
       console.log("Incendie + Lumière Rouge");
