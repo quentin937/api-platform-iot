@@ -23,9 +23,7 @@ serialport.pipe(xbeeAPI.parser);
 xbeeAPI.builder.pipe(serialport);
 
 let MAC_LED = null;
-//let MAC_LED = "0013A20041FB6072";
 let MAC_PORTE = null;
-//let MAC_PORTE = "0013A20041FB6063";
 let MAC_BR = "FFFFFFFFFFFFFFFF";
 let MAC_CAPTEUR = null;
 
@@ -88,7 +86,7 @@ xbeeAPI.parser.on("data", function (frame) {
     const ad0Value = frame.analogSamples.AD0;
     console.log(ad0Value);
 
-    if (ad0Value > 1100) {
+    if (ad0Value > 1180) {
       console.log("Incendie + Lumière Rouge");
       // Mettre à jour l'état de la porte si nécessaire
       if (prevPorteState !== 5) {
@@ -122,9 +120,8 @@ xbeeAPI.parser.on("data", function (frame) {
 
         prevLedState = 5;
       }
-    } else if (ad0Value < 1101) {
+    } else if (ad0Value < 1181) {
       console.log("Libre Service + Lumière Bleu");
-
       // Mettre à jour l'état de la porte si nécessaire
       if (prevPorteState !== 4) {
         let frame_obj = {
