@@ -98,80 +98,18 @@ xbeeAPI.parser.on("data", function (frame) {
 
     if (frame.nodeIdentifier === "capteur"){
       MAC_CAPTEUR = frame.remote64;
+      console.log("capteur MAC : ", MAC_CAPTEUR);
     } else if (frame.nodeIdentifier === "led"){
       MAC_LED = frame.remote64;
+      console.log("capteur MAC : ", MAC_LED);
     } else if (frame.nodeIdentifier === "porte"){
       MAC_PORTE = frame.remote64;
+      console.log("capteur MAC : ", MAC_PORTE);
     }
     //storage.registerSensor(frame.remote64)
 
   } else if (C.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX === frame.type) {
-/*
-      if (frame.analogSamples.AD0 > 1100   ) {
-        console.log("Incendie + Lumière Rouge")
 
-          // porte
-          frame_obj = { // AT Request to be sent
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: MAC_PORTE,
-            command: "D0",
-            commandParameter: [ 5 ],
-          };
-
-          xbeeAPI.builder.write(frame_obj);
-
-          // lumiere rouge
-          frame_obj = { // AT Request to be sent
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: MAC_LED,
-            command: "D0",
-            commandParameter: [ 4 ],
-          };
-
-          xbeeAPI.builder.write(frame_obj);
-
-          frame_obj = { // AT Request to be sent
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: MAC_LED,
-            command: "D2",
-            commandParameter: [ 5 ],
-          };
-
-          xbeeAPI.builder.write(frame_obj);
-      } else {
-        console.log("Libre Service + Lumière Bleu")
-
-          // porte
-          frame_obj = { // AT Request to be sent
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: MAC_PORTE,
-            command: "D0",
-            commandParameter: [ 4 ],
-          };
-        xbeeAPI.builder.write(frame_obj);
-
-        // lumiere rouge
-          frame_obj = { // AT Request to be sent
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: MAC_LED,
-            command: "D0",
-            commandParameter: [ 5 ],
-          };
-
-          xbeeAPI.builder.write(frame_obj);
-
-          frame_obj = { // AT Request to be sent
-            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-            destination64: MAC_LED,
-            command: "D2",
-            commandParameter: [ 4 ],
-          };
-
-          xbeeAPI.builder.write(frame_obj);
-      }
-      console.log(frame.analogSamples.AD0)
-*/
-        //storage.registerSample(frame.remote64,frame.analogSamples.AD0 )
     const ad0Value = frame.analogSamples.AD0;
     console.log(ad0Value);
 
