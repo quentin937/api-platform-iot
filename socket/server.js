@@ -164,6 +164,7 @@ xbeeAPI.parser.on("data", function (frame) {
     if (ad0Value > 1090) {
       console.log("Incendie + Lumière Rouge");
 
+      // test push
       // Mettre à jour l'état de la porte si nécessaire
       if (prevPorteState !== 5) {
         let frame_obj = {
