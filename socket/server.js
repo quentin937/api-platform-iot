@@ -161,7 +161,6 @@ xbeeAPI.parser.on("data", function (frame) {
     const ad0Value = frame.analogSamples.AD0;
     console.log(ad0Value);
 
-    // Initialiser les états précédents
     let prevPorteState = null;
     let prevLedState = null;
 
@@ -170,11 +169,11 @@ xbeeAPI.parser.on("data", function (frame) {
 
       // Mettre à jour l'état de la porte si nécessaire
       if (prevPorteState !== 5) {
-        let frame_obj = {
-          type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
-          destination64: MAC_PORTE,
-          command: "D0",
-          commandParameter: [5],
+        frame_obj = { // AT Request to be sent
+            type: C.FRAME_TYPE.REMOTE_AT_COMMAND_REQUEST,
+            destination64: MAC_PORTE,
+            command: "D0",
+            commandParameter: [ 5 ],
         };
         xbeeAPI.builder.write(frame_obj);
         prevPorteState = 5;
