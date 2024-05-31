@@ -22,8 +22,10 @@ let serialport = new SerialPort(SERIAL_PORT, {
 serialport.pipe(xbeeAPI.parser);
 xbeeAPI.builder.pipe(serialport);
 
-let MAC_LED = "0013A20041FB6072";
-let MAC_PORTE = "0013A20041FB6063";
+let MAC_LED = "";
+//let MAC_LED = "0013A20041FB6072";
+let MAC_PORTE = "";
+//let MAC_PORTE = "0013A20041FB6063";
 let MAC_BR = "FFFFFFFFFFFFFFFF";
 let MAC_CAPTEUR = "";
 const MAC_Detect_Lumiere = "";
