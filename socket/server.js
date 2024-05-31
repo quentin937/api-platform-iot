@@ -210,7 +210,7 @@ xbeeAPI.parser.on("data", function (frame) {
 
         prevLedState = 5;
       }
-    } else {
+    } else if (ad0Value < 1101) {
       console.log("Libre Service + Lumière Bleu");
 
       // Mettre à jour l'état de la porte si nécessaire
@@ -245,6 +245,8 @@ xbeeAPI.parser.on("data", function (frame) {
 
         prevLedState = 4;
       }
+    } else {
+      console.log("MAC a générer");
     }
 
   } else if (C.FRAME_TYPE.REMOTE_COMMAND_RESPONSE === frame.type) {
