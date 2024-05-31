@@ -72,6 +72,8 @@ serialport.on("open", function () {
 // All frames parsed by the XBee will be emitted here
 
 // storage.listSensors().then((sensors) => sensors.forEach((sensor) => console.log(sensor.data())))
+    let prevPorteState = null;
+    let prevLedState = null;
 
 xbeeAPI.parser.on("data", function (frame) {
 
@@ -160,9 +162,6 @@ xbeeAPI.parser.on("data", function (frame) {
         //storage.registerSample(frame.remote64,frame.analogSamples.AD0 )
     const ad0Value = frame.analogSamples.AD0;
     console.log(ad0Value);
-
-    let prevPorteState = null;
-    let prevLedState = null;
 
     if (ad0Value > 1100) {
       console.log("Incendie + Lumière Rouge");
