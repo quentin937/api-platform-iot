@@ -86,7 +86,7 @@ xbeeAPI.parser.on("data", function (frame) {
     if (MAC_LED === null) return;
 
     const ad0Value = frame.analogSamples.AD0;
-    console.log(frame);
+    console.log(ad0Value);
 
     if (ad0Value > 1100) {
       console.log("Incendie + Lumière Rouge");
