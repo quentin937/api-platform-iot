@@ -22,12 +22,12 @@ let serialport = new SerialPort(SERIAL_PORT, {
 serialport.pipe(xbeeAPI.parser);
 xbeeAPI.builder.pipe(serialport);
 
-let MAC_LED = "";
+let MAC_LED = null;
 //let MAC_LED = "0013A20041FB6072";
-let MAC_PORTE = "";
+let MAC_PORTE = null;
 //let MAC_PORTE = "0013A20041FB6063";
 let MAC_BR = "FFFFFFFFFFFFFFFF";
-let MAC_CAPTEUR = "";
+let MAC_CAPTEUR = null;
 
 let prevPorteState = null;
 let prevLedState = null;
@@ -81,12 +81,15 @@ xbeeAPI.parser.on("data", function (frame) {
 
   } else if (C.FRAME_TYPE.ZIGBEE_IO_DATA_SAMPLE_RX === frame.type) {
 
+    if (MAC_PORTE === null) return;
+    if (MAC_CAPTEUR === null) return;
+    if (MAC_LED === null) return;
+
     const ad0Value = frame.analogSamples.AD0;
     console.log(frame);
 
     if (ad0Value > 1100) {
       console.log("Incendie + Lumière Rouge");
-
       // Mettre à jour l'état de la porte si nécessaire
       if (prevPorteState !== 5) {
         frame_obj = { // AT Request to be sent
